@@ -1,0 +1,36 @@
+name: bloddpressuretrackerapp
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  logger: ^2.6.0
+  solid_lints: ^0.3.1
+
+# ui
+  cupertino_icons: ^1.0.8
+  fl_chart: ^1.0.0
+  # storage
+  sizer: ^3.0.5
+  flutter_bloc: ^9.1.1
+  numberpicker: ^2.1.2
+
+  # Storage
+  shared_preferences: ^2.5.3
+  sqflite: ^2.4.2
+  path: ^1.8.0
+  equatable: ^2.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+
