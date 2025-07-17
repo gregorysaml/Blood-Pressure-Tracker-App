@@ -1,6 +1,6 @@
-import 'package:bloddpressuretrackerapp/bloc/blood_pressure_model.dart';
+import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood_pressure_entries_bloc.dart';
-import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood_pressure_status_enum.dart';
+import 'package:bloddpressuretrackerapp/enums/save_blood_pressure_status_enum.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/chart_widget.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/getters/month_names.dart';
 import 'package:flutter/material.dart';

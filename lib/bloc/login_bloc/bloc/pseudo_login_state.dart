@@ -1,10 +1,23 @@
 part of 'pseudo_login_bloc.dart';
 
-sealed class PseudoLoginState extends Equatable {
-  const PseudoLoginState();
-  
-  @override
-  List<Object> get props => [];
-}
+/// pseudo login state
+final class PseudoLoginState extends Equatable {
+  /// Query Status
+  final PseudoLoginStatus status;
 
-final class PseudoLoginInitial extends PseudoLoginState {}
+  @override
+  List<Object> get props => [status];
+
+  /// intial State
+  const PseudoLoginState({this.status = PseudoLoginStatus.loggedOut});
+
+  /// Readable copy of ExtensionsState to push
+  PseudoLoginState copyWith({PseudoLoginStatus? status}) {
+    return PseudoLoginState(status: status ?? this.status);
+  }
+
+  @override
+  String toString() {
+    return 'PseudoLoginState{status: $status}';
+  }
+}

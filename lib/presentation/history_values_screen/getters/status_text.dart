@@ -1,4 +1,4 @@
-import 'package:bloddpressuretrackerapp/bloc/blood_pressure_model.dart';
+import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/consts/const.dart';
 
 /// get status text based on blood pressure

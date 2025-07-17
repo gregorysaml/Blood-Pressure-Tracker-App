@@ -1,4 +1,4 @@
-import 'package:bloddpressuretrackerapp/bloc/blood_pressure_model.dart';
+import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/logger/logger.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/legent_item_widget.dart';
 import 'package:fl_chart/fl_chart.dart';

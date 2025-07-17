@@ -1,4 +1,4 @@
-import 'package:bloddpressuretrackerapp/bloc/blood_pressure_model.dart';
+import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/consts/const.dart';
 import 'package:bloddpressuretrackerapp/logger/logger.dart';
 import 'package:path/path.dart';
@@ -34,11 +34,7 @@ class SaveBloodRepo {
   Future<void> insertEntry(BloodPressureModel entry) async {
     logger.i('Inserting entry: ${entry.dateTime}');
     final db = await database;
-    await db.insert(
-      'entries',
-      entry.toMap(),
-
-    );
+    await db.insert('entries', entry.toMap());
   }
 
   /// fetch entries by date
@@ -86,8 +82,8 @@ class SaveBloodRepo {
     int month,
   ) async {
     final db = await database;
-    final startDate = DateTime(year, month,);
-    final endDate = DateTime(year, month + one,);
+    final startDate = DateTime(year, month);
+    final endDate = DateTime(year, month + one);
     final startString = startDate.toIso8601String().substring(0, 10);
     final endString = endDate.toIso8601String().substring(0, 10);
 
