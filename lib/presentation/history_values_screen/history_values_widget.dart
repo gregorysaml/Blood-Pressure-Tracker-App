@@ -1,4 +1,3 @@
-import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood_pressure_entries_bloc.dart';
 import 'package:bloddpressuretrackerapp/consts/const.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/chart_widget.dart';
@@ -22,7 +21,7 @@ class _HistoryValuesState extends State<HistoryValues>
   late TabController _tabController;
   DateTime _selectedDate = DateTime.now();
   DateTime _selectedWeekStart = DateTime.now();
-  DateTime _selectedMonth = DateTime.now();
+  final DateTime _selectedMonth = DateTime.now();
 
   @override
   void initState() {
@@ -30,20 +29,6 @@ class _HistoryValuesState extends State<HistoryValues>
     _tabController = TabController(length: three, vsync: this);
     _selectedWeekStart = _getWeekStart(DateTime.now());
     _loadInitialData();
-  }
-
-  Color _getStatusColor(BloodPressureModel entry) {
-    if (entry.systolic > oneHundredForty ||
-        entry.systolic < ninety ||
-        entry.diastolic > ninety ||
-        entry.diastolic < sixty) {
-      return Colors.red;
-    } else if (entry.systolic >= oneHundredThirty ||
-        entry.diastolic >= eighty) {
-      return Colors.orange;
-    }
-
-    return Colors.green;
   }
 
   DateTime _getWeekStart(DateTime date) {
@@ -123,12 +108,6 @@ class _HistoryValuesState extends State<HistoryValues>
         ],
       ),
     );
-  }
-
-  // ignore: avoid_returning_widgets
-
-  String _formatTime(DateTime dateTime) {
-    return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
 
   @override

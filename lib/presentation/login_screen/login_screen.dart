@@ -55,6 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       controller: _usernameController,
                       validator: (value) {
+                        // ignore: avoid_non_null_assertion
                         if (value!.isEmpty) {
                           return 'Please enter some text';
                         }
@@ -69,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       controller: _passwordController,
                       validator: (value) {
+                        // ignore: avoid_non_null_assertion
                         if (value!.isEmpty) {
                           return 'Please enter some text';
                         }

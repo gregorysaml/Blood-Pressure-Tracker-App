@@ -28,7 +28,6 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
 
   DateTime _selectedDateTime = DateTime.now();
   FeedbackEnum? _currentFeedback;
-  bool _showFeedback = false;
 
   Future<void> _selectDateTime() async {
     final DateTime? pickedDate = await showDatePicker(
@@ -77,7 +76,6 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
       ),
     );
     setState(() {
-      _showFeedback = true;
       _currentFeedback = _calculateFeedback.calculateFeedback(
         systolicValue,
         diastolicValue,
@@ -244,7 +242,7 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
       SaveBloodPressureEntriesBloc,
       SaveBloodPressureEntrysState
     >(
-      listener: (context, state) {
+      listener: (_, state) {
         if (state.status == SaveBloodPressureEntrysStatus.saved) {
           // Navigator.pushReplacementNamed(context, '/mainpage');
 

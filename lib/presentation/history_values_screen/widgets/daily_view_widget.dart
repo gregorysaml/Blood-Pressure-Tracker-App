@@ -1,5 +1,6 @@
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood_pressure_entries_bloc.dart';
+import 'package:bloddpressuretrackerapp/consts/const.dart';
 import 'package:bloddpressuretrackerapp/enums/save_blood_pressure_status_enum.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/getters/status_text.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +38,12 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
   }
 
   Color _getStatusColor(BloodPressureModel entry) {
-    if (entry.systolic >= 140 || entry.diastolic >= 90) {
+    if (entry.systolic >= oneHundredForty || entry.diastolic >= ninety) {
       return Colors.red;
-    } else if (entry.systolic >= 130 || entry.diastolic >= 80) {
+    } else if (entry.systolic >= oneHundredThirty ||
+        entry.diastolic >= eighty) {
       return Colors.orange;
-    } else if (entry.systolic >= 120) {
+    } else if (entry.systolic >= oneHundredTwenty) {
       return Colors.yellow;
     } else {
       return Colors.green;
@@ -49,7 +51,7 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
   }
 
   String _formatTime(DateTime dateTime) {
-    return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    return '${dateTime.hour.toString().padLeft(two, '0')}:${dateTime.minute.toString().padLeft(two, '0')}';
   }
 
   @override
