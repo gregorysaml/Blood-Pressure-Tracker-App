@@ -9,14 +9,12 @@ import 'package:sizer/sizer.dart';
 class ChartWidget extends StatefulWidget {
   /// entries list
   final List<BloodPressureModel> entries;
+
   /// period
   final String period;
 
-  const ChartWidget({
-    super.key,
-    required this.entries,
-    required this.period,
-  });
+  ///
+  const ChartWidget({required this.entries, required this.period, super.key});
 
   @override
   State<ChartWidget> createState() => _ChartWidgetState();
@@ -33,7 +31,6 @@ class _ChartWidgetState extends State<ChartWidget> {
     super.initState();
     _processData();
   }
-
 
   void _processData() {
     // Group entries by day for better visualization
@@ -89,7 +86,6 @@ class _ChartWidgetState extends State<ChartWidget> {
           Expanded(
             child: LineChart(
               LineChartData(
-                gridData: const FlGridData(show: true),
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
@@ -129,12 +125,8 @@ class _ChartWidgetState extends State<ChartWidget> {
                       //   return const Text('');
                     ),
                   ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
+                  topTitles: const AxisTitles(),
+                  rightTitles: const AxisTitles(),
                 ),
                 borderData: FlBorderData(show: true),
                 lineBarsData: [
@@ -143,21 +135,18 @@ class _ChartWidgetState extends State<ChartWidget> {
                     isCurved: true,
                     color: Colors.red,
                     barWidth: 3,
-                    dotData: const FlDotData(show: true),
                   ),
                   LineChartBarData(
                     spots: diastolicSpots,
                     isCurved: true,
                     color: Colors.blue,
                     barWidth: 3,
-                    dotData: const FlDotData(show: true),
                   ),
                   LineChartBarData(
                     spots: pulseSpots,
                     isCurved: true,
                     color: Colors.green,
                     barWidth: 3,
-                    dotData: const FlDotData(show: true),
                   ),
                 ],
                 minY: 0,
@@ -183,13 +172,12 @@ class _ChartWidgetState extends State<ChartWidget> {
   @override
   void didUpdateWidget(ChartWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.entries != widget.entries || oldWidget.period != widget.period) {
+    if (oldWidget.entries != widget.entries ||
+        oldWidget.period != widget.period) {
       _processData();
     }
   }
 }
-
-
 
 // Legacy function for backward compatibility
 Widget buildChart(List<BloodPressureModel> entries, String period) {

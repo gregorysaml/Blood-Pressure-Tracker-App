@@ -5,7 +5,7 @@ import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood
 import 'package:bloddpressuretrackerapp/enums/feedback_enum.dart';
 import 'package:bloddpressuretrackerapp/enums/save_blood_pressure_status_enum.dart';
 import 'package:bloddpressuretrackerapp/logger/logger.dart';
-import 'package:bloddpressuretrackerapp/presentation/add_mesurment_screen/feedback_mesurements.dart';
+import 'package:bloddpressuretrackerapp/presentation/add_mesurment_screen/feedback_values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -21,101 +21,14 @@ class AddMesurmentScreen extends StatefulWidget {
 }
 
 class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
+  final CalculateFeedback _calculateFeedback = CalculateFeedback();
   int systolicValue = 120;
   int diastolicValue = 70;
   int pulseValue = 60;
-  // Validation constants
-  static const int _minSystolic = 50;
-  static const int _maxSystolic = 250;
-  static const int _minDiastolic = 30;
-  static const int _maxDiastolic = 150;
-  static const int _minPulse = 30;
-  static const int _maxPulse = 200;
-
-  // Medical range constants
-  static const int _normalSystolicMin = 90;
-  static const int _normalSystolicMax = 120;
-  static const int _normalDiastolicMin = 60;
-  static const int _normalDiastolicMax = 80;
-  static const int _normalPulseMin = 60;
-  static const int _normalPulseMax = 100;
-
-  static const int _slightlyAbnormalSystolicMin = 121;
-  static const int _slightlyAbnormalSystolicMax = 139;
-  static const int _slightlyAbnormalDiastolicMin = 81;
-  static const int _slightlyAbnormalDiastolicMax = 89;
-  static const int _slightlyAbnormalPulseLowMin = 50;
-  static const int _slightlyAbnormalPulseLowMax = 59;
-  static const int _slightlyAbnormalPulseHighMin = 101;
-  static const int _slightlyAbnormalPulseHighMax = 110;
-
-  static const int _criticalSystolicLow = 90;
-  static const int _criticalSystolicHigh = 140;
-  static const int _criticalDiastolicLow = 60;
-  static const int _criticalDiastolicHigh = 90;
-  static const int _criticalPulseLow = 50;
-  static const int _criticalPulseHigh = 110;
 
   DateTime _selectedDateTime = DateTime.now();
   FeedbackEnum? _currentFeedback;
   bool _showFeedback = false;
-
-  String? _validateDiastolic(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Diastolic pressure is required';
-    }
-    final intValue = int.tryParse(value);
-    if (intValue == null) {
-      return 'Please enter a valid number';
-    }
-    if (intValue < _minDiastolic || intValue > _maxDiastolic) {
-      return 'Diastolic should be between $_minDiastolic-$_maxDiastolic mmHg';
-    }
-
-    return null;
-  }
-
-  String? _validatePulse(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Pulse is required';
-    }
-    final intValue = int.tryParse(value);
-    if (intValue == null) {
-      return 'Please enter a valid number';
-    }
-    if (intValue < _minPulse || intValue > _maxPulse) {
-      return 'Pulse should be between $_minPulse-$_maxPulse bpm';
-    }
-
-    return null;
-  }
-
-  FeedbackEnum _calculateFeedback(int systolic, int diastolic, int pulse) {
-    // Check for critical ranges first
-    if (systolic < _criticalSystolicLow ||
-        systolic > _criticalSystolicHigh ||
-        diastolic < _criticalDiastolicLow ||
-        diastolic > _criticalDiastolicHigh ||
-        pulse < _criticalPulseLow ||
-        pulse > _criticalPulseHigh) {
-      return FeedbackEnum.critical;
-    }
-
-    // Check for slightly abnormal ranges
-    if ((systolic >= _slightlyAbnormalSystolicMin &&
-            systolic <= _slightlyAbnormalSystolicMax) ||
-        (diastolic >= _slightlyAbnormalDiastolicMin &&
-            diastolic <= _slightlyAbnormalDiastolicMax) ||
-        (pulse >= _slightlyAbnormalPulseLowMin &&
-            pulse <= _slightlyAbnormalPulseLowMax) ||
-        (pulse >= _slightlyAbnormalPulseHighMin &&
-            pulse <= _slightlyAbnormalPulseHighMax)) {
-      return FeedbackEnum.slightlyAbnormal;
-    }
-
-    // Normal ranges
-    return FeedbackEnum.normal;
-  }
 
   Future<void> _selectDateTime() async {
     final DateTime? pickedDate = await showDatePicker(
@@ -128,9 +41,9 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
 
     if (pickedDate != null) {
       final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
         initialTime: TimeOfDay.fromDateTime(_selectedDateTime),
         helpText: 'Select measurement time',
+        context: context,
       );
 
       if (pickedTime != null) {
@@ -165,7 +78,14 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
     );
     setState(() {
       _showFeedback = true;
+      _currentFeedback = _calculateFeedback.calculateFeedback(
+        systolicValue,
+        diastolicValue,
+        pulseValue,
+      );
     });
+
+    _showMyDialog();
 
     // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
@@ -176,12 +96,157 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
     );
   }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Color primaryColor;
+        Color backgroundColor;
+        Color textColor;
+        IconData iconData;
+        String title;
+        String description;
+
+        switch (_currentFeedback) {
+          case FeedbackEnum.normal:
+            primaryColor = Colors.green;
+            backgroundColor = const Color(0xFFE8F5E8);
+            textColor = const Color(0xFF2E7D32);
+            iconData = Icons.check_circle_outline;
+            title = 'Excellent!';
+            description =
+                'Your blood pressure readings are within the normal, healthy range.';
+          case FeedbackEnum.slightlyAbnormal:
+            primaryColor = Colors.orange;
+            backgroundColor = const Color(0xFFFFF3E0);
+            textColor = Colors.orange;
+            iconData = Icons.warning_amber_outlined;
+            title = 'Monitor Closely';
+            description =
+                'Some readings are slightly elevated. Consider lifestyle adjustments.';
+          case FeedbackEnum.critical:
+            primaryColor = Colors.red;
+            backgroundColor = const Color(0xFFFFEBEE);
+            textColor = Colors.red;
+            iconData = Icons.priority_high_outlined;
+            title = 'Attention Required';
+            description =
+                'Please consult with a healthcare professional as soon as possible.';
+          default:
+            primaryColor = Colors.grey;
+            backgroundColor = Colors.grey.shade100;
+            textColor = Colors.grey.shade700;
+            iconData = Icons.info_outline;
+            title = 'Information';
+            description = 'Blood pressure reading recorded.';
+        }
+
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 8,
+          child: Container(
+            padding: EdgeInsets.all(6.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [backgroundColor, backgroundColor.withOpacity(0.8)],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Icon section
+                Container(
+                  width: 16.w,
+                  height: 16.w,
+                  decoration: BoxDecoration(
+                    color: primaryColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: primaryColor.withOpacity(0.3),
+                      width: 2,
+                    ),
+                  ),
+                  child: Icon(iconData, color: primaryColor, size: 8.w),
+                ),
+                SizedBox(height: 4.w),
+
+                // Title
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 5.w,
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                    letterSpacing: 0.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 2.w),
+
+                // Description
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  child: Text(
+                    description,
+                    style: TextStyle(
+                      fontSize: 3.5.w,
+                      color: textColor.withOpacity(0.8),
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 6.w),
+
+                // Action button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/mainpage');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryColor,
+                      foregroundColor: Colors.white,
+                      elevation: 2,
+                      padding: EdgeInsets.symmetric(vertical: 3.w),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Continue',
+                      style: TextStyle(
+                        fontSize: 4.w,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SaveBloodPressureEntriesBloc, SaveBloodPressureEntrysState>(
+    return BlocListener<
+      SaveBloodPressureEntriesBloc,
+      SaveBloodPressureEntrysState
+    >(
       listener: (context, state) {
         if (state.status == SaveBloodPressureEntrysStatus.saved) {
-          Navigator.pushReplacementNamed(context, '/mainpage');
+          // Navigator.pushReplacementNamed(context, '/mainpage');
 
           return;
         }
@@ -328,10 +393,6 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
               ),
 
               // Feedback Card
-              FeedbackCard(
-                showFeedback: _showFeedback,
-                currentFeedback: _currentFeedback,
-              ),
             ],
           ),
         ),

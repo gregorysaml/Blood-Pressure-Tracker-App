@@ -23,6 +23,8 @@ class _MainPageState extends State<MainPage> {
       listener: (context, state) {
         if (state.status == PseudoLoginStatusEnum.loggedOut) {
           Navigator.pushNamed(context, '/login');
+          
+          return;
         }
       },
       child: Scaffold(

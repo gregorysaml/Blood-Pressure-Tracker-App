@@ -1,8 +1,8 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
-import 'package:bloddpressuretrackerapp/enums/save_blood_pressure_status_enum.dart';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood_repo.dart';
+import 'package:bloddpressuretrackerapp/enums/save_blood_pressure_status_enum.dart';
 import 'package:bloddpressuretrackerapp/logger/logger.dart';
 import 'package:equatable/equatable.dart';
 // ignore: depend_on_referenced_packages
@@ -61,7 +61,7 @@ class SaveBloodPressureEntriesBloc
     emit(state.copyWith(status: SaveBloodPressureEntrysStatus.loading));
     try {
       final entries = await repository.fetchEntriesByDate(event.date);
-      logger.i('Entries: ${entries}');
+      logger.i('Entries: $entries');
       emit(
         state.copyWith(
           status: SaveBloodPressureEntrysStatus.loaded,
