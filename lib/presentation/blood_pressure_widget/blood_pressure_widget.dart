@@ -116,7 +116,7 @@ class _BloodPressureWidgetState extends State<BloodPressureWidget> {
                                         ),
                                       ),
                                       Text(
-                                        '${entry.first.systolic}',
+                                        '${entry.last.systolic}',
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           fontWeight: FontWeight.bold,
@@ -146,7 +146,7 @@ class _BloodPressureWidgetState extends State<BloodPressureWidget> {
                                         ),
                                       ),
                                       Text(
-                                        '${entry.first.systolic}',
+                                        '${entry.last.systolic}',
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           fontWeight: FontWeight.bold,
@@ -180,7 +180,7 @@ class _BloodPressureWidgetState extends State<BloodPressureWidget> {
                                             ),
                                             SizedBox(width: 1.w),
                                             Text(
-                                              '${entry.first.pulse} ',
+                                              '${entry.last.pulse} ',
                                               style: TextStyle(
                                                 fontSize: 20.sp,
                                                 fontWeight: FontWeight.bold,
@@ -204,7 +204,7 @@ class _BloodPressureWidgetState extends State<BloodPressureWidget> {
                                             MainAxisAlignment.end,
                                         children: [
                                           Text(
-                                            _formatTime(entry.first.dateTime),
+                                            _formatTime(entry.last.dateTime),
                                             style: TextStyle(
                                               fontSize: 14.sp,
                                               fontWeight: FontWeight.bold,

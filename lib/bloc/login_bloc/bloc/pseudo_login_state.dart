@@ -3,16 +3,16 @@ part of 'pseudo_login_bloc.dart';
 /// pseudo login state
 final class PseudoLoginState extends Equatable {
   /// Query Status
-  final PseudoLoginStatus status;
+  final PseudoLoginStatusEnum status;
 
   @override
   List<Object> get props => [status];
 
   /// intial State
-  const PseudoLoginState({this.status = PseudoLoginStatus.loggedOut});
+  const PseudoLoginState({this.status = PseudoLoginStatusEnum.loggedOut});
 
   /// Readable copy of ExtensionsState to push
-  PseudoLoginState copyWith({PseudoLoginStatus? status}) {
+  PseudoLoginState copyWith({PseudoLoginStatusEnum? status}) {
     return PseudoLoginState(status: status ?? this.status);
   }
 

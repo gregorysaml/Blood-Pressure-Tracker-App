@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood_pressure_entries_bloc.dart';
 import 'package:bloddpressuretrackerapp/enums/feedback_enum.dart';
+import 'package:bloddpressuretrackerapp/enums/save_blood_pressure_status_enum.dart';
 import 'package:bloddpressuretrackerapp/logger/logger.dart';
 import 'package:bloddpressuretrackerapp/presentation/add_mesurment_screen/feedback_mesurements.dart';
 import 'package:flutter/material.dart';
@@ -173,158 +174,166 @@ class _AddMesurmentScreenState extends State<AddMesurmentScreen> {
         backgroundColor: Colors.green,
       ),
     );
-    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Add Measurement'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(top: 6.w),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Date and Time Selection
-            Center(
-              child: SizedBox(
-                height: 20.h,
-                width: 95.w,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return BlocListener<SaveBloodPressureEntriesBloc, SaveBloodPressureEntrysState>(
+      listener: (context, state) {
+        if (state.status == SaveBloodPressureEntrysStatus.saved) {
+          Navigator.pushReplacementNamed(context, '/mainpage');
+
+          return;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Text('Add Measurement'),
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(top: 6.w),
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Date and Time Selection
+              Center(
+                child: SizedBox(
+                  height: 20.h,
+                  width: 95.w,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          const Text('Systolic'),
+                          Expanded(
+                            child: NumberPicker(
+                              value: systolicValue,
+                              minValue: 40,
+                              maxValue: 200,
+                              haptics: true,
+                              onChanged: (value) =>
+                                  setState(() => systolicValue = value),
+                            ),
+                          ),
+                          Text('mmHg', style: TextStyle(fontSize: 12.sp)),
+                        ],
+                      ),
+                      const VerticalDivider(),
+                      Column(
+                        children: [
+                          const Text('Diastolic'),
+                          Expanded(
+                            child: NumberPicker(
+                              value: diastolicValue,
+                              minValue: 40,
+                              maxValue: 150,
+                              haptics: true,
+                              onChanged: (value) =>
+                                  setState(() => diastolicValue = value),
+                            ),
+                          ),
+                          Text('mmHg', style: TextStyle(fontSize: 12.sp)),
+                        ],
+                      ),
+                      const VerticalDivider(),
+                      Column(
+                        children: [
+                          const Text('Pulse rate'),
+                          Expanded(
+                            child: NumberPicker(
+                              value: pulseValue,
+                              minValue: 30,
+                              maxValue: 200,
+                              haptics: true,
+                              onChanged: (value) =>
+                                  setState(() => pulseValue = value),
+                            ),
+                          ),
+                          Text('bpm', style: TextStyle(fontSize: 12.sp)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 4.h),
+              Padding(
+                padding: EdgeInsets.all(6.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: [
-                        const Text('Systolic'),
-                        Expanded(
-                          child: NumberPicker(
-                            value: systolicValue,
-                            minValue: 40,
-                            maxValue: 200,
-                            haptics: true,
-                            onChanged: (value) =>
-                                setState(() => systolicValue = value),
-                          ),
-                        ),
-                        Text('mmHg', style: TextStyle(fontSize: 12.sp)),
-                      ],
+                    Text(
+                      'Measurement Date & Time',
+                      style: TextStyle(
+                        fontSize: 4.w,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
-                    const VerticalDivider(),
-                    Column(
-                      children: [
-                        const Text('Diastolic'),
-                        Expanded(
-                          child: NumberPicker(
-                            value: diastolicValue,
-                            minValue: 40,
-                            maxValue: 150,
-                            haptics: true,
-                            onChanged: (value) =>
-                                setState(() => diastolicValue = value),
-                          ),
+                    SizedBox(height: 1.h),
+                    GestureDetector(
+                      onTap: _selectDateTime,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 4.w,
+                          vertical: 2.h,
                         ),
-                        Text('mmHg', style: TextStyle(fontSize: 12.sp)),
-                      ],
-                    ),
-                    const VerticalDivider(),
-                    Column(
-                      children: [
-                        const Text('Pulse rate'),
-                        Expanded(
-                          child: NumberPicker(
-                            value: pulseValue,
-                            minValue: 30,
-                            maxValue: 200,
-                            haptics: true,
-                            onChanged: (value) =>
-                                setState(() => pulseValue = value),
-                          ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
                         ),
-                        Text('bpm', style: TextStyle(fontSize: 12.sp)),
-                      ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${_selectedDateTime.day}/${_selectedDateTime.month}/${_selectedDateTime.year} '
+                              '${_selectedDateTime.hour.toString().padLeft(2, '0')}:${_selectedDateTime.minute.toString().padLeft(2, '0')}',
+                              style: TextStyle(
+                                fontSize: 4.w,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Icon(
+                              Icons.calendar_today,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-            SizedBox(height: 4.h),
-            Padding(
-              padding: EdgeInsets.all(6.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Measurement Date & Time',
-                    style: TextStyle(
-                      fontSize: 4.w,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: 1.h),
-                  GestureDetector(
-                    onTap: _selectDateTime,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 2.h,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${_selectedDateTime.day}/${_selectedDateTime.month}/${_selectedDateTime.year} '
-                            '${_selectedDateTime.hour.toString().padLeft(2, '0')}:${_selectedDateTime.minute.toString().padLeft(2, '0')}',
-                            style: TextStyle(
-                              fontSize: 4.w,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Icon(
-                            Icons.calendar_today,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            SizedBox(height: 4.h),
+              SizedBox(height: 4.h),
 
-            // Save Button
-            ElevatedButton(
-              onPressed: _saveMeasurement,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                foregroundColor: Colors.white,
-                padding: EdgeInsets.all(6.w),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(60),
+              // Save Button
+              ElevatedButton(
+                onPressed: _saveMeasurement,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.all(5.w),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                ),
+                child: Text(
+                  'Save Measurement',
+                  style: TextStyle(fontSize: 4.w, fontWeight: FontWeight.w600),
                 ),
               ),
-              child: Text(
-                'Save Measurement',
-                style: TextStyle(fontSize: 4.w, fontWeight: FontWeight.w600),
-              ),
-            ),
 
-            // Feedback Card
-            buildFeedbackCard(
-              showFeedback: _showFeedback,
-              currentFeedback: _currentFeedback,
-            ),
-          ],
+              // Feedback Card
+              FeedbackCard(
+                showFeedback: _showFeedback,
+                currentFeedback: _currentFeedback,
+              ),
+            ],
+          ),
         ),
       ),
     );

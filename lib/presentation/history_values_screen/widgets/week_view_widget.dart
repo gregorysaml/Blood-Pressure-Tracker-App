@@ -88,12 +88,12 @@ class _WeekViewWidgetState extends State<WeekViewWidget> {
                 SaveBloodPressureEntriesBloc,
                 SaveBloodPressureEntrysState
               >(
-                builder: (context, state) {
+                builder: (_, state) {
                   if (state.status == SaveBloodPressureEntrysStatus.loading) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state.status == SaveBloodPressureEntrysStatus.error) {
-                    return Center(child: Text('No measurements available'));
+                    return const Center(child: Text('No measurements available'));
                   }
                   if (state.status == SaveBloodPressureEntrysStatus.loaded) {
                     final entries = state.result.cast<BloodPressureModel>();

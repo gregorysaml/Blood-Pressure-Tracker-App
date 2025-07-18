@@ -10,9 +10,11 @@ class SaveBloodRepo {
 
   /// get database
   Future<Database> get database async {
+    // ignore: avoid_non_null_assertion
     if (_database != null) return _database!;
     _database = await _initDB();
 
+    // ignore: avoid_non_null_assertion
     return _database!;
   }
 

@@ -18,6 +18,7 @@ dependencies:
   # storage
   sizer: ^3.0.5
   flutter_bloc: ^9.1.1
+  bloc_test: ^10.0.0
   numberpicker: ^2.1.2
 
   # Storage

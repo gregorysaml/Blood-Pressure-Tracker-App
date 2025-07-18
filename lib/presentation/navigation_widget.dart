@@ -25,11 +25,16 @@ class _NavigationWidgetState extends State<NavigationWidget> {
   Widget build(BuildContext context) {
     return BlocListener<PseudoLoginBloc, PseudoLoginState>(
       listener: (context, state) {
-        if (state.status == PseudoLoginStatus.loggedIn) {
+        if (state.status == PseudoLoginStatusEnum.loggedIn) {
           Navigator.pushNamed(context, '/mainpage');
+
+          return;
         }
-        if (state.status == PseudoLoginStatus.loggedOut) {
+        
+        if (state.status == PseudoLoginStatusEnum.loggedOut) {
           Navigator.pushNamed(context, '/login');
+          
+          return;
         }
       },
       child: const SizedBox(),

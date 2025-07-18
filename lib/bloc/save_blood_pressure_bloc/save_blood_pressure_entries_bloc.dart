@@ -61,7 +61,7 @@ class SaveBloodPressureEntriesBloc
     emit(state.copyWith(status: SaveBloodPressureEntrysStatus.loading));
     try {
       final entries = await repository.fetchEntriesByDate(event.date);
-      logger.i('Entries: ${entries.first.dateTime}');
+      logger.i('Entries: ${entries}');
       emit(
         state.copyWith(
           status: SaveBloodPressureEntrysStatus.loaded,

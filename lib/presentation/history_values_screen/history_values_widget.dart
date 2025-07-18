@@ -1,19 +1,12 @@
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/blood_pressure_model.dart';
 import 'package:bloddpressuretrackerapp/bloc/save_blood_pressure_bloc/save_blood_pressure_entries_bloc.dart';
-import 'package:bloddpressuretrackerapp/enums/save_blood_pressure_status_enum.dart';
 import 'package:bloddpressuretrackerapp/consts/const.dart';
-import 'package:bloddpressuretrackerapp/logger/logger.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/chart_widget.dart';
-import 'package:bloddpressuretrackerapp/presentation/history_values_screen/legent_item_widget.dart';
-import 'package:bloddpressuretrackerapp/presentation/history_values_screen/getters/month_names.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/widgets/daily_view_widget.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/widgets/monthly_view_widget.dart';
-import 'package:bloddpressuretrackerapp/presentation/history_values_screen/getters/status_text.dart';
 import 'package:bloddpressuretrackerapp/presentation/history_values_screen/widgets/week_view_widget.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
 
 /// all history values widget
 class HistoryValues extends StatefulWidget {

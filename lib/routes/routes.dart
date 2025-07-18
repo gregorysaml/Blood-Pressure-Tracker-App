@@ -9,20 +9,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// routes
 final routes = {
-  '/': (_) => BlocProvider(
+  '/': (_) => BlocProvider<PseudoLoginBloc>(
     create: (_) => PseudoLoginBloc(),
     child: const NavigationWidget(),
   ),
-  '/login': (_) => BlocProvider(
-    create: (context) => PseudoLoginBloc(),
+  '/login': (_) => BlocProvider<PseudoLoginBloc>(
+    create: (_) => PseudoLoginBloc(),
     child: const LoginScreen(),
   ),
-  '/mainpage': (_) => const MainPage(),
-  '/historyValues': (_) => BlocProvider(
+  '/mainpage': (_) => BlocProvider<PseudoLoginBloc>(
+    create: (_) => PseudoLoginBloc(),
+    child: const MainPage(),
+  ),
+  '/historyValues': (_) => BlocProvider<SaveBloodPressureEntriesBloc>(
     create: (_) => SaveBloodPressureEntriesBloc(),
     child: const HistoryValues(),
   ),
-  '/addMesurmentScreen': (_) => BlocProvider(
+  '/addMesurmentScreen': (_) => BlocProvider<SaveBloodPressureEntriesBloc>(
     create: (_) => SaveBloodPressureEntriesBloc(),
     child: const AddMesurmentScreen(),
   ),

@@ -1,5 +1,5 @@
 /// enum for the status of the save blood pressure entrys
-enum PseudoLoginStatus {
+enum PseudoLoginStatusEnum {
   /// Initial State
   loggedOut,
 
