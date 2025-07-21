@@ -62,6 +62,16 @@ class SaveBloodPressureEntriesBloc
     try {
       final entries = await repository.fetchEntriesByDate(event.date);
       logger.i('Entries: $entries');
+      if (entries.isEmpty) {
+        emit(
+          state.copyWith(
+            status: SaveBloodPressureEntrysStatus.error,
+            result: const <BloodPressureModel>[],
+          ),
+        );
+        
+        return;
+      }
       emit(
         state.copyWith(
           status: SaveBloodPressureEntrysStatus.loaded,

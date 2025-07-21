@@ -117,7 +117,7 @@ class _BloodPressureWidgetState extends State<BloodPressureWidget> {
                                         ),
                                       ),
                                       Text(
-                                        '${entry.last.systolic}',
+                                        '${entry.last.systolic}' ?? ''  ,
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           fontWeight: FontWeight.bold,
