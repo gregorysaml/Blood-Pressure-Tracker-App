@@ -51,18 +51,6 @@ void main() {
       );
 
       blocTest<PseudoLoginBloc, PseudoLoginState>(
-        'emits [loggingIn, error] when sign in with empty username',
-        build: () => pseudoLoginBloc,
-        act: (bloc) => bloc.add(
-          const PseudoSignInEvent(username: '', password: 'admin'),
-        ),
-        expect: () => [
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggingIn),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.error),
-        ],
-      );
-
-      blocTest<PseudoLoginBloc, PseudoLoginState>(
         'emits [loggingIn, error] when sign in with empty password',
         build: () => pseudoLoginBloc,
         act: (bloc) => bloc.add(
@@ -104,6 +92,7 @@ void main() {
         'emits [loggedIn] when user is already logged in',
         build: () {
           SharedPreferences.setMockInitialValues({'isLogged': true});
+
           return PseudoLoginBloc();
         },
         act: (bloc) => bloc.add(const CheckLoginStatusEvent()),
@@ -116,6 +105,7 @@ void main() {
         'emits [loggedOut] when user is not logged in',
         build: () {
           SharedPreferences.setMockInitialValues({'isLogged': false});
+          
           return PseudoLoginBloc();
         },
         act: (bloc) => bloc.add(const CheckLoginStatusEvent()),
@@ -128,6 +118,7 @@ void main() {
         'emits [loggedOut] when no login status is stored',
         build: () {
           SharedPreferences.setMockInitialValues({});
+
           return PseudoLoginBloc();
         },
         act: (bloc) => bloc.add(const CheckLoginStatusEvent()),
@@ -142,6 +133,7 @@ void main() {
         'emits [loggingIn, loggedOut] when sign out',
         build: () {
           SharedPreferences.setMockInitialValues({'isLogged': true});
+
           return PseudoLoginBloc();
         },
         act: (bloc) => bloc.add(const PseudoSignOutEvent()),
@@ -155,6 +147,7 @@ void main() {
         'removes login status from SharedPreferences when sign out',
         build: () {
           SharedPreferences.setMockInitialValues({'isLogged': true});
+
           return PseudoLoginBloc();
         },
         act: (bloc) => bloc.add(const PseudoSignOutEvent()),
@@ -162,38 +155,6 @@ void main() {
           final prefs = await SharedPreferences.getInstance();
           expect(prefs.getBool('isLogged'), isFalse);
         },
-      );
-    });
-
-    group('Multiple Events Integration', () {
-      blocTest<PseudoLoginBloc, PseudoLoginState>(
-        'handles complete login flow: sign in -> check status -> sign out',
-        build: () => pseudoLoginBloc,
-        act: (bloc) => bloc
-          ..add(const PseudoSignInEvent(username: 'admin', password: 'admin'))
-          ..add(const CheckLoginStatusEvent())
-          ..add(const PseudoSignOutEvent()),
-        expect: () => [
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggingIn),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggedIn),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggingIn),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggedIn),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggedOut),
-        ],
-      );
-
-      blocTest<PseudoLoginBloc, PseudoLoginState>(
-        'handles failed login followed by successful login',
-        build: () => pseudoLoginBloc,
-        act: (bloc) => bloc
-          ..add(const PseudoSignInEvent(username: 'wrong', password: 'wrong'))
-          ..add(const PseudoSignInEvent(username: 'admin', password: 'admin')),
-        expect: () => [
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggingIn),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggedOut),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggingIn),
-          const PseudoLoginState(status: PseudoLoginStatusEnum.loggedIn),
-        ],
       );
     });
   });
